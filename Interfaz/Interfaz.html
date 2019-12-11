@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>    
+    <meta charset="utf-8" />
+    <title>Games</title>
+</head>
+<body>
+    <h2>Games</h2>
+
+
+    <select id="dpdato" class="btn btn-secondary dropdown-toggle" onchange="change_myselect(this.value)">
+        <option value="0">Select the game</option>
+        <option value="1">Game 1</option>
+        <option value="2">Game 2</option>
+        <option value="3">Game 3</option>
+        <option value="4">Game 4</option>
+    </select>
+    <p id="demo"></p><br />
+
+    <p id="rdo"></p>
+    ID to Delete: <input type="text" id="ID">
+    <button onclick="DeleteGame()">Borrar</button>
+
+    <script>
+
+        function change_myselect() {
+            var obj, dbParam, xmlhttp, myObj, x, txt = "";
+            var x = parseInt(document.getElementById("dpdato").value);
+
+            dbParam = JSON.stringify(obj);
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    myObj = JSON.parse(this.responseText);
+                    txt += "<div class='container'><table class='table' border='3'>"
+
+                    txt += "<tr><th scope='row'>ID</th> <td>" + myObj.ID + "</td></tr>";
+                    txt += "<tr><th scope='row'>Nombre</th> <td>" + myObj.Nombre + "</td></tr>";
+                    txt += "<tr><th scope='row'>Descripcion</th> <td>" + myObj.Descripcion + "</td></tr>";
+                    txt += "<tr><th scope='row'>Categoria</th> <td>" + myObj.Categoria + "</td></tr>";
+                    txt += "<tr><th scope='row'>Edad</th> <td>" + myObj.Edad + "</td></tr>";
+                    txt += "<tr><th scope='row'>Precio</th> <td>" + myObj.Precio + "</td></tr>";
+
+                    txt += "</table></div>"
+                    document.getElementById("demo").innerHTML = txt;
+                }
+            };
+            xmlhttp.open("GET", "https://localhost:44377/API/Games/" + x, true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send();
+        }
+
+
+        function DeleteGame() {
+            var obj, dbParam, xmlhttp, x;
+            var x = (document.getElementById("ID").value);
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("rdo").innerHTML = this.responseText;
+                }
+            }
+            xmlhttp.withCredentials = false;
+            xmlhttp.open("DELETE", "https://localhost:44377/API/Games/" + x, true);
+            xmlhttp.send();
+        }
+
+    </script>
+</body>
+</html>
